@@ -1,61 +1,49 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native';
-import News from './src/components/News';
-
+import { StyleSheet, Text, View, Image, SafeAreaView, TouchableOpacity } from 'react-native';
 import { fetchNewsService, NewsData } from './src/utils/handle-api';
+import NewsList from './src/components/NewsList';
 
 export default function App() {
-  const [newsList, setNewsList] = useState<NewsData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [newsList, setNewsList] = useState<NewsData[]>([]);
+    const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchNews();
-  }, []);
-
-  const fetchNews = async () => {
-    try {
-      setLoading(true);
-      const data = await fetchNewsService();
-      setNewsList(data);
-    } catch (err: any) {
-      setError(err.message || "Erro ao obter notícias");
-    } finally {
-      setLoading(false);
-    }
-  };
+    useEffect(() => {
+        fetchNews();
+    }, []);
+    
+    const fetchNews = async () => {
+        try {
+            setLoading(true);
+            const data = await fetchNewsService();
+            setNewsList(data);
+        } catch (err: any) {
+            setError(err.message || "Erro ao obter notícias");
+        } finally {
+            setLoading(false);
+        }
+    };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
       
       <View style={styles.header}>
+        <Image 
+          source={require("./tasks/images/newspaper-banner.png")}
+          style={{ width: 40, height: 40 }}
+        />
         <Text style={styles.headerTitle}>Últimas notícias</Text>
+        <Text style={styles.headerCounter}>{newsList.length} Notícias Encontradas</Text>
+        <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.button} onPress={fetchNews}>
+              <Text>Atualizar Lista</Text>
+            </TouchableOpacity>
+        </View>
       </View>
 
-      {loading ? (
-        <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color="#0000ff" />
-          <Text style={styles.loadingText}>Carregando notícias...</Text>
-        </View>
-      ) : error ? (
-        <View style={styles.centerContainer}>
-          <Text style={styles.errorText}>Erro: {error}</Text>
-        </View>
-      ) : (
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          {newsList.map((item) => (
-            <News
-              key={item.id.toString()}
-              title={item.title}
-              image={item.image}
-              published={item.published}
-              link={item.link}
-            />
-          ))}
-        </ScrollView>
-      )}
+      <NewsList itens={newsList} loading={loading} error={error}/>
     </SafeAreaView>
   );
 }
@@ -71,16 +59,31 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
     alignItems: 'center',
+    gap: 10,
     paddingTop: 40, // Ensure header is spaced from exact top
   },
   headerTitle: {
     fontSize: 22,
     fontWeight: 'bold',
   },
+  headerCounter: {
+    fontSize: 14,
+    fontWeight: '200',
+  },
   centerContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  buttonContainer: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  button: {
+    borderRadius: 50,
+    borderColor: 'black',
+    borderWidth: 1,
+    padding: 10,
   },
   loadingText: {
     marginTop: 10,
