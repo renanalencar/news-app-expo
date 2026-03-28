@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Linking } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Linking, Alert } from 'react-native';
 
 interface NewsProps {
   title: string;
@@ -8,14 +8,14 @@ interface NewsProps {
   link: string;
 }
 
-export default function News({ title, image, published, link }: NewsProps) {
+export default function NewsItem({ title, image, published, link }: NewsProps) {
   const handlePress = async () => {
     try {
       const supported = await Linking.canOpenURL(link);
       if (supported) {
         await Linking.openURL(link);
       } else {
-        console.warn(`Não foi possível abrir a URL: ${link}`);
+        Alert.alert(`Não foi possível abrir a URL: ${link}`);
       }
     } catch (error) {
       console.error(error);
