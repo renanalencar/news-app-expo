@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, SafeAreaView, ActivityIndicator, Platform, StatusBar as RNStatusBar, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, SafeAreaView, ActivityIndicator, Platform, StatusBar as RNStatusBar, TextInput, TouchableOpacity, Modal } from 'react-native';
 import News from './src/components/News';
+import NewsDetail from './src/components/NewsDetail';
 import { globalStyles } from './src/styles/global';
 
 import { fetchNewsService, NewsData } from './src/utils/handle-api';
@@ -12,6 +13,7 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [selectedNews, setSelectedNews] = useState<NewsData | null>(null);
 
   useEffect(() => {
     fetchNews();
@@ -105,6 +107,7 @@ export default function App() {
               image={item.image}
               published={item.published}
               link={item.link}
+              onPress={() => setSelectedNews(item)}
             />
           )}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
@@ -115,6 +118,17 @@ export default function App() {
           }
         />
       )}
+
+      <Modal
+        visible={selectedNews !== null}
+        animationType="slide"
+        onRequestClose={() => setSelectedNews(null)}
+      >
+        <NewsDetail
+          news={selectedNews}
+          onClose={() => setSelectedNews(null)}
+        />
+      </Modal>
     </SafeAreaView>
   );
 }
