@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "news-app-expo",
-    "slug": "news-app-expo",
+    "name": "News App",
+    "slug": "news-app-renan",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,9 +12,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.renan.newsapp"
     },
     "android": {
+      "package": "com.renan.newsapp",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",

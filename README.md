@@ -52,3 +52,18 @@ Para rodar o projeto localmente, certifique-se de possuir:
 ---
 
 > Projeto desenvolvido visando a facilidade e aprendizado para desenvolvedores que estão iniciando os estudos com React Native e Expo.
+
+## 🚀 Deploy com EAS
+
+O **EAS (Expo Application Services)** é um conjunto de serviços de nuvem profundamente integrados ao Expo, projetados para facilitar e acelerar o processo de build, deploy e atualização de aplicativos React Native. Ele simplifica significativamente a gestão de ambientes na nuvem utilizando arquivos de configuração declarativos como o `eas.json`.
+
+Com base na nossa configuração, temos três perfis de build distintos:
+- **`development`**: focado na geração de Development Builds (builds de desenvolvimento local), incluindo clientes dev personalizados para debbuger facilmente o código nativo ou instalar pacotes de terceiros durante a etapa inicial do desenvolvimento.
+- **`preview`**: ideal para que a equipe possa testar o app fora do ambiente de desenvolvimento. O build é distribuído por link interno para testes de QA e avaliação das features antes da aprovação final para as lojas oficiais.
+- **`production`**: concebido para empacotar o projeto em sua versão definitiva. Possui assinaturas ativadas para publicação de release oficial tanto na Google Play Store, como na Apple App Store.
+
+Para gerar um build focado em testes internos de pré-lançamento para a plataforma Android, basta rodar o seguinte comando:
+
+```bash
+eas build --profile preview --platform android
+```
