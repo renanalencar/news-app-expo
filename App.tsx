@@ -35,6 +35,12 @@ export default function App() {
         <Text style={styles.headerTitle}>Últimas notícias</Text>
       </View>
 
+      {!loading && !error && (
+        <Text style={styles.counterText}>
+          {newsList.length} notícias encontradas
+        </Text>
+      )}
+
       {loading ? (
         <View style={styles.centerContainer}>
           <ActivityIndicator size="large" color="#0000ff" />
@@ -50,6 +56,7 @@ export default function App() {
             <News
               key={item.id.toString()}
               title={item.title}
+              summary={item.summary}
               image={item.image}
               published={item.published}
               link={item.link}
@@ -77,6 +84,14 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 22,
     fontWeight: 'bold',
+  },
+  counterText: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 4,
+    fontSize: 14,
+    color: '#666',
+    fontWeight: '500',
   },
   centerContainer: {
     flex: 1,
