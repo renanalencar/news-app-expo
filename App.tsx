@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, SafeAreaView, ActivityIndicator, Platform, StatusBar as RNStatusBar } from 'react-native';
+import { StyleSheet, Text, View, FlatList, SafeAreaView, ActivityIndicator, Platform, StatusBar as RNStatusBar } from 'react-native';
 import News from './src/components/News';
 import { globalStyles } from './src/styles/global';
 
@@ -51,18 +51,26 @@ export default function App() {
           <Text style={styles.errorText}>Erro: {error}</Text>
         </View>
       ) : (
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          {newsList.map((item) => (
+        <FlatList
+          data={newsList}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.scrollContent}
+          renderItem={({ item }) => (
             <News
-              key={item.id.toString()}
               title={item.title}
               summary={item.summary}
               image={item.image}
               published={item.published}
               link={item.link}
             />
-          ))}
-        </ScrollView>
+          )}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>Nenhuma notícia disponível no momento.</Text>
+            </View>
+          }
+        />
       )}
     </SafeAreaView>
   );
@@ -109,5 +117,21 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#e0e0e0',
+    marginHorizontal: 16,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
   },
 });
